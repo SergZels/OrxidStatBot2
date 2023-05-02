@@ -1,3 +1,266 @@
 2022-10-13 10:12:55.069 | DEBUG    | __main__:on_process_update:28 - 1080587853
 2022-10-13 10:12:59.068 | DEBUG    | __main__:on_process_update:28 - 1080587853
 2022-10-14 13:08:46.255 | DEBUG    | __main__:on_process_update:28 - 1080587853
+2022-10-27 17:26:04.665 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-27 17:26:11.419 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-27 17:26:19.635 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-27 17:28:16.232 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-27 17:28:18.216 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-27 17:28:20.607 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-28 10:10:19.827 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-28 10:10:21.650 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-28 10:13:52.143 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-28 10:13:59.211 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-28 10:13:59.219 | DEBUG    | __main__:get_pokaznik:57 - Виручка - 999
+2022-10-28 10:22:15.568 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 10:22:59.056 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 10:23:02.041 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 10:23:02.046 | DEBUG    | __main__:get_pokaznik:55 - Виручка - 22
+2022-10-28 10:25:32.097 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 10:25:35.611 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 10:25:35.617 | DEBUG    | __main__:get_pokaznik:55 - Виручка - 333
+2022-10-28 13:45:18.477 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 13:45:46.622 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 13:45:46.651 | DEBUG    | __main__:get_pokaznik:55 - Виручка - 111
+2022-10-28 14:25:35.549 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 14:25:38.811 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 14:25:38.839 | DEBUG    | __main__:get_pokaznik:56 - Виручка - 222
+2022-10-28 14:25:40.812 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 14:27:18.268 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 14:27:20.877 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 14:27:24.453 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 14:27:24.468 | DEBUG    | __main__:get_pokaznik:56 - Виручка - 555
+2022-10-28 14:27:27.126 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 15:18:54.118 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 15:18:56.864 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 15:19:00.882 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 15:19:00.895 | DEBUG    | __main__:get_pokaznik:56 - Виручка - 888
+2022-10-28 15:19:02.486 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 15:31:56.687 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 15:32:58.287 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 15:41:32.127 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 15:58:43.140 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 16:06:44.280 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 16:09:14.354 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 16:10:38.445 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 16:15:34.366 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 16:57:02.090 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 16:58:22.904 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 17:02:01.293 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 21:17:00.636 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 21:17:02.771 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 21:18:32.508 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 21:19:52.741 | DEBUG    | __main__:on_process_update:30 - 1080587853
+2022-10-28 21:30:14.450 | DEBUG    | __main__:on_process_update:28 - 1080587853
+2022-10-28 21:33:38.916 | DEBUG    | __main__:on_process_update:28 - 1080587853
+2022-10-28 21:33:48.319 | DEBUG    | __main__:on_process_update:28 - 1080587853
+2022-10-29 11:11:41.105 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:11:43.843 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:11:49.744 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:11:49.749 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 111
+2022-10-29 11:13:33.965 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:13:35.335 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:13:38.016 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:13:38.034 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 444
+2022-10-29 11:18:02.535 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:18:05.385 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:18:09.768 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:18:09.773 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 123
+2022-10-29 11:19:37.160 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:19:40.215 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:19:46.098 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:19:46.103 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 555
+2022-10-29 11:20:00.525 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:20:02.207 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:20:08.584 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:20:08.596 | DEBUG    | __main__:get_pokaznik:67 - Виручка - 67
+2022-10-29 11:22:11.292 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:22:15.208 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:22:18.873 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:22:18.914 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 999
+2022-10-29 11:26:18.886 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:26:56.196 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:27:09.338 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:27:09.355 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 777
+2022-10-29 11:27:10.700 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:27:10.704 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 777
+2022-10-29 11:31:25.311 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:31:27.794 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:31:37.950 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:31:38.041 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 11
+2022-10-29 11:33:01.975 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:33:03.983 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:33:07.197 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:33:07.231 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 44
+2022-10-29 11:45:45.447 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:45:46.886 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:45:50.482 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 11:45:50.485 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 1
+2022-10-29 12:08:16.840 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:08:18.791 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:08:22.107 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:08:22.125 | DEBUG    | __main__:get_pokaznik:67 - Виручка - 66
+2022-10-29 12:08:30.497 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:08:30.510 | DEBUG    | __main__:get_pokaznik:67 - Виручка - /Виручка_до_обіду
+2022-10-29 12:08:37.118 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:08:37.121 | DEBUG    | __main__:get_pokaznik:67 - Виручка - 12
+2022-10-29 12:08:39.451 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:08:39.455 | DEBUG    | __main__:get_pokaznik:67 - Виручка - /Виручка_до_обіду
+2022-10-29 12:09:36.795 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:09:42.841 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:09:42.857 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 1234
+2022-10-29 12:09:49.116 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:09:53.829 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:09:53.833 | DEBUG    | __main__:get_pokaznik:67 - Виручка - 4321
+2022-10-29 12:10:48.308 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:10:51.326 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:10:51.336 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 12
+2022-10-29 12:10:53.826 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:10:56.955 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:10:56.964 | DEBUG    | __main__:get_pokaznik:67 - Виручка - 123
+2022-10-29 12:47:34.748 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:47:39.681 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:47:39.705 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 3322
+2022-10-29 12:53:23.431 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:53:26.867 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:53:26.896 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 444
+2022-10-29 12:54:41.914 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:54:43.525 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:54:47.367 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 12:54:47.374 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 444
+2022-10-29 20:25:34.404 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:25:50.083 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:25:50.088 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 777
+2022-10-29 20:26:51.179 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:26:57.284 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:26:57.289 | DEBUG    | __main__:get_pokaznik:67 - Виручка - 333
+2022-10-29 20:27:21.001 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:27:25.031 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:27:25.036 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 777
+2022-10-29 20:29:04.845 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:29:11.205 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:29:11.209 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 44445
+2022-10-29 20:34:14.394 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:34:20.455 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:34:20.463 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 8899
+2022-10-29 20:37:31.329 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:37:38.356 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:37:38.359 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 2211
+2022-10-29 20:40:17.035 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:40:18.745 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:40:24.338 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:40:24.343 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 2211
+2022-10-29 20:40:35.865 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:40:42.188 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:40:42.192 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 2111
+2022-10-29 20:45:10.834 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:45:15.017 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:45:15.021 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 221
+2022-10-29 20:47:59.353 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:48:01.034 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:48:04.695 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:48:04.698 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 211
+2022-10-29 20:50:07.205 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:50:09.001 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:50:15.140 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-29 20:50:15.145 | DEBUG    | __main__:get_pokaznik:52 - Виручка - 212
+2022-10-31 15:00:22.279 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-31 15:25:18.941 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-31 15:48:43.739 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-31 15:48:47.498 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-31 15:48:48.028 | DEBUG    | __main__:f_cash:52 - Виручка - 777
+2022-10-31 16:38:57.989 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-31 16:39:05.340 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-31 16:39:05.343 | DEBUG    | __main__:get_pokaznik:67 - Виручка - 345
+2022-10-31 16:40:13.187 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-31 16:41:31.851 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-31 16:41:42.901 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-31 16:41:42.905 | DEBUG    | __main__:f_cash:52 - Виручка - 998
+2022-10-31 16:41:59.334 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-31 16:47:31.049 | DEBUG    | __main__:on_process_update:32 - 1080587853
+2022-10-31 17:22:51.188 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 17:22:53.997 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 17:23:02.456 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 17:23:02.459 | DEBUG    | __main__:f_cash:54 - Виручка - 111
+2022-10-31 17:29:59.813 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 17:30:04.081 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 17:30:10.686 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 17:30:10.743 | DEBUG    | __main__:f_cash:54 - Виручка - 543
+2022-10-31 17:30:13.719 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 17:30:18.882 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 17:30:18.909 | DEBUG    | __main__:get_pokaznik:69 - Виручка - 345
+2022-10-31 17:30:20.792 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 17:32:11.139 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 17:32:16.114 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 17:32:16.832 | DEBUG    | __main__:f_cash:54 - Виручка - 567
+2022-10-31 18:43:35.230 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 18:43:44.270 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 18:43:47.920 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 18:43:47.931 | DEBUG    | __main__:f_cash:54 - Виручка - 11
+2022-10-31 18:43:50.300 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 18:43:52.253 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 18:43:52.256 | DEBUG    | __main__:get_pokaznik:69 - Виручка - 12
+2022-10-31 18:43:55.616 | DEBUG    | __main__:on_process_update:33 - 1080587853
+2022-10-31 18:58:47.620 | DEBUG    | __main__:on_process_update:42 - 1345627008
+2022-10-31 18:58:48.011 | DEBUG    | __main__:on_process_update:44 - Хтось лівий зайшов 1345627008
+2022-10-31 18:59:35.372 | DEBUG    | __main__:on_process_update:42 - 1345627008
+2022-11-03 19:37:43.503 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-03 19:37:46.032 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-03 19:37:51.973 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-03 19:37:51.978 | DEBUG    | __main__:get_pokaznik:83 - Виручка - 1000
+2022-11-03 19:39:42.662 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-03 19:39:46.098 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-03 19:39:46.101 | DEBUG    | __main__:getcash:98 - Витрати - 1000
+2022-11-03 19:39:56.117 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-03 19:39:56.127 | DEBUG    | __main__:description:106 - Опис - Лейби
+2022-11-03 20:58:40.288 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-03 21:01:05.818 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-03 21:03:52.215 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-03 21:04:33.374 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-03 21:06:49.512 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-04 15:52:39.244 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-04 15:55:05.322 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-04 16:00:03.648 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-04 16:10:08.174 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-04 16:13:15.954 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-04 16:14:30.634 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-04 16:15:20.290 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-04 16:16:27.983 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-04 16:21:23.969 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-04 16:25:06.935 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-04 16:27:08.555 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-04 16:37:54.254 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-04 16:38:30.405 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-04 16:39:48.674 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-04 16:40:40.971 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-04 17:01:15.800 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-07 21:01:00.595 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-07 21:01:04.203 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2022-11-07 21:01:04.333 | DEBUG    | __main__:f_cash:70 - Виручка - 0
+2022-11-08 12:09:00.758 | DEBUG    | __main__:on_process_update:46 - {"update_id": 732327832, "message": {"message_id": 900, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1667909342, "text": "Статистика за місяць 📊"}}
+2022-11-08 12:09:00.772 | DEBUG    | __main__:on_process_update:47 - 1080587853
+2023-03-30 21:37:48.764 | DEBUG    | __main__:on_process_update:51 - {"update_id": 443772680, "message": {"message_id": 2058, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1680212268, "text": "ghgh"}}
+2023-03-30 21:37:48.767 | DEBUG    | __main__:on_process_update:52 - 1080587853
+2023-03-30 21:37:50.209 | DEBUG    | __main__:on_process_update:51 - {"update_id": 443772681, "message": {"message_id": 2060, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1680212270, "text": "Статистика за місяць 📊"}}
+2023-03-30 21:37:50.210 | DEBUG    | __main__:on_process_update:52 - 1080587853
+2023-03-30 21:38:16.689 | DEBUG    | __main__:on_process_update:51 - {"update_id": 443772682, "message": {"message_id": 2061, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1680212296, "text": "Виручка після обіду 💶"}}
+2023-03-30 21:38:16.690 | DEBUG    | __main__:on_process_update:52 - 1080587853
+2023-03-30 21:38:18.922 | DEBUG    | __main__:on_process_update:51 - {"update_id": 443772683, "message": {"message_id": 2063, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1680212298, "text": "4"}}
+2023-03-30 21:38:18.922 | DEBUG    | __main__:on_process_update:52 - 1080587853
+2023-03-30 21:38:18.992 | DEBUG    | __main__:get_pokaznik:94 - Виручка - 4
+2023-03-30 21:38:20.257 | DEBUG    | __main__:on_process_update:51 - {"update_id": 443772684, "message": {"message_id": 2066, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1680212300, "text": "Статистика за місяць 📊"}}
+2023-03-30 21:38:20.258 | DEBUG    | __main__:on_process_update:52 - 1080587853
+2023-03-30 21:50:34.503 | DEBUG    | __main__:on_process_update:51 - {"update_id": 443772685, "message": {"message_id": 2069, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1680213034, "text": "Виручка до обіду 💵"}}
+2023-03-30 21:50:34.504 | DEBUG    | __main__:on_process_update:52 - 1080587853
+2023-03-30 21:50:37.341 | DEBUG    | __main__:on_process_update:51 - {"update_id": 443772686, "message": {"message_id": 2071, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1680213037, "text": "11"}}
+2023-03-30 21:50:37.341 | DEBUG    | __main__:on_process_update:52 - 1080587853
+2023-03-30 21:50:37.385 | DEBUG    | __main__:f_cash:75 - Виручка - 11
+2023-03-30 21:50:39.332 | DEBUG    | __main__:on_process_update:51 - {"update_id": 443772687, "message": {"message_id": 2074, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1680213039, "text": "Статистика за місяць 📊"}}
+2023-03-30 21:50:39.333 | DEBUG    | __main__:on_process_update:52 - 1080587853
+2023-03-30 21:51:52.735 | DEBUG    | __main__:on_process_update:51 - {"update_id": 443772688, "message": {"message_id": 2075, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1680213112, "text": "Виручка до обіду 💵"}}
+2023-03-30 21:51:52.735 | DEBUG    | __main__:on_process_update:52 - 1080587853
+2023-03-30 21:51:54.816 | DEBUG    | __main__:on_process_update:51 - {"update_id": 443772689, "message": {"message_id": 2077, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1680213114, "text": "22"}}
+2023-03-30 21:51:54.816 | DEBUG    | __main__:on_process_update:52 - 1080587853
+2023-03-30 21:51:54.922 | DEBUG    | __main__:f_cash:75 - Виручка - 22
+2023-03-30 21:51:56.394 | DEBUG    | __main__:on_process_update:51 - {"update_id": 443772690, "message": {"message_id": 2080, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1680213116, "text": "Статистика за місяць 📊"}}
+2023-03-30 21:51:56.395 | DEBUG    | __main__:on_process_update:52 - 1080587853

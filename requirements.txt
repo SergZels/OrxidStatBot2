@@ -1,3 +1,5 @@
+wheel
 aiogram
 loguru
 matplotlib
+peewee

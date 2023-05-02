@@ -1,1 +1,0 @@
-from bd import bd
