@@ -3,3 +3,4 @@ aiogram
 loguru
 matplotlib
 peewee
+numpy
