@@ -163,7 +163,8 @@ async def month_statistic(message: types.Message):
     if month > 1:
         month = now.month - 1
     else:
-         year = now.year - 1
+        year = now.year - 1
+        month =12
 
     te = BotBDnew.statOfMonth(month=month, year=year)
     doc = open('testplor.png', 'rb')
