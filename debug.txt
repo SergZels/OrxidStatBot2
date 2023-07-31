@@ -357,3 +357,11 @@
 2023-07-28 13:02:58.779 | DEBUG    | __main__:get_pokaznik:109 - Виручка - 10000
 2023-07-28 13:03:01.102 | DEBUG    | __main__:on_process_update:61 - {"update_id": 443775908, "message": {"message_id": 6470, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1690549379, "text": "Статистика за місяць 📊"}}
 2023-07-28 13:03:01.102 | DEBUG    | __main__:on_process_update:62 - 1080587853
+2023-07-31 08:52:37.028 | DEBUG    | __main__:on_process_update:61 - {"update_id": 443775956, "message": {"message_id": 6598, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1690793558, "text": "ооо"}}
+2023-07-31 08:52:37.029 | DEBUG    | __main__:on_process_update:62 - 1080587853
+2023-07-31 08:53:07.619 | DEBUG    | __main__:on_process_update:61 - {"update_id": 443775957, "message": {"message_id": 6600, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1690793589, "text": "Статистика за місяць 📊"}}
+2023-07-31 08:53:07.619 | DEBUG    | __main__:on_process_update:62 - 1080587853
+2023-07-31 08:53:14.513 | DEBUG    | __main__:on_process_update:61 - {"update_id": 443775958, "message": {"message_id": 6603, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1690793596, "text": "Минулий місяць"}}
+2023-07-31 08:53:14.513 | DEBUG    | __main__:on_process_update:62 - 1080587853
+2023-07-31 08:53:16.692 | DEBUG    | __main__:on_process_update:61 - {"update_id": 443775959, "message": {"message_id": 6606, "from": {"id": 1080587853, "is_bot": false, "first_name": "Sergey", "language_code": "uk"}, "chat": {"id": 1080587853, "first_name": "Sergey", "type": "private"}, "date": 1690793598, "text": "Рік"}}
+2023-07-31 08:53:16.693 | DEBUG    | __main__:on_process_update:62 - 1080587853
