@@ -86,7 +86,7 @@ async def f_cash(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['viruhka'] = message.text
     logger.debug(f"Виручка - {message.text}")
-    botbdnew.recAM(data['viruhka'])
+    BotBDnew.recAM(data['viruhka'])
     await bot.send_message(conf.ADMIN_ULIA, f"Виручку {data['viruhka']}грн внесено!", reply_markup=markup)
     await bot.send_message(conf.ADMIN_SERG, f"Виручку {data['viruhka']}грн внесено!", reply_markup=markup)
     # await message.answer(f"Виручку {data['viruhka']}грн внесено!",reply_markup=markup)
@@ -107,7 +107,7 @@ async def get_pokaznik(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['viruhka'] = message.text
     logger.debug(f"Виручка - {message.text}")
-    botbdnew.recPM(data['viruhka'])
+    BotBDnew.recPM(data['viruhka'])
     await bot.send_message(conf.ADMIN_ULIA, f"Виручку {data['viruhka']}грн внесено!", reply_markup=markup)
     await bot.send_message(conf.ADMIN_SERG, f"Виручку {data['viruhka']}грн внесено!", reply_markup=markup)
     # await message.answer(f"Виручку {data['viruhka']}грн внесено!",reply_markup=markup)
@@ -138,7 +138,7 @@ async def description(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['desr'] = message.text
     logger.debug(f"Опис - {message.text}")
-    botbdnew.recCredet(data['viruhka'], data["desr"])
+    BotBDnew.recCredet(data['viruhka'], data["desr"])
     await message.answer(f"Витрати {data['desr']} {data['viruhka']} внесено", reply_markup=markup)
     await state.finish()
 
