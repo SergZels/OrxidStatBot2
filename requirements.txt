@@ -1,6 +1,5 @@
-wheel
-aiogram==2.25.1
-loguru
-matplotlib
-peewee
-numpy
+aiogram==3.31.0
+loguru>=0.7,<1
+matplotlib>=3.10,<4
+numpy>=2.3,<3
+peewee>=3.17,<4

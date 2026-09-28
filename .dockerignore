@@ -1,0 +1,17 @@
+.git
+.env
+conf.py
+data
+*.db
+*.pyc
+__pycache__
+.idea
+.vscode
+venv
+*.log
+debug.txt
+*.png
+*.jpg
+*.bat
+bd/test.py
+brocast.py

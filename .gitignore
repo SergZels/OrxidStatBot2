@@ -1,8 +1,13 @@
 conf.py
 debug.txt
 testplot.png
+testplor.png
 *.db
 *.bat
 botBD.db
 .vscode
 .idea
+/data/
+/.env
+__pycache__/
+*.py[cod]

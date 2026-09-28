@@ -1,237 +1,214 @@
-from aiogram import Bot, types
-from aiogram.dispatcher import Dispatcher, FSMContext
-from aiogram.dispatcher.filters.state import State, StatesGroup
-from aiogram.utils import executor
-from keyboards.client_keyboard import kbcl, markup
-from aiogram.types import ReplyKeyboardRemove
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram.dispatcher.handler import CancelHandler
-from aiogram.dispatcher import filters
-import conf
+"""Telegram webhook for the Orxid statistics bot."""
+
+import asyncio
 import datetime
-from aiogram.dispatcher.middlewares import BaseMiddleware
-from bd.bdnew import BotBDnew
+import os
+from zoneinfo import ZoneInfo
+
+from aiohttp import web
+from aiogram import Bot, Dispatcher, F, Router, types
+from aiogram.dispatcher.middlewares.base import BaseMiddleware
+from aiogram.filters import Command, StateFilter
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
+from aiogram.types import BufferedInputFile, ReplyKeyboardRemove
+from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from loguru import logger
-from aiogram.utils.executor import start_webhook
 
-TEST_MODE = False
+from bd.bdnew import BotBDnew, Credet, Stat, db
+from keyboards.client_keyboard import markup
 
-# if conf.VPS:
-#     TEST_MODE = False
+TOKEN = os.environ["BOT_TOKEN"]
+ADMIN_IDS = {int(value) for value in os.environ["ADMIN_IDS"].split(",")}
+WEBHOOK_URL = os.getenv("WEBHOOK_URL", "https://orxid.in.ua/prod_orxmstat")
+WEBHOOK_PATH = "/" + WEBHOOK_URL.split("/", 3)[-1].lstrip("/")
+WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET") or None
+WEBAPP_PORT = int(os.getenv("PORT", "3004"))
+KYIV = ZoneInfo("Europe/Kyiv")
+reminder_task = None
 
-##------------------Блок ініціалізації-----------------##
-if TEST_MODE:
-    API_Token = conf.API_TOKEN_Test
-else:
-    API_Token = conf.TOKEN
-
-ADMIN_ID = conf.ADMIN_ID
-bot = Bot(token=API_Token)  # os.getenv('TOKEN'))
-storage = MemoryStorage()
-dp = Dispatcher(bot, storage=storage)
-botbdnew = BotBDnew()
-logger.add("debug.txt")
-# webhook settings
-WEBHOOK_HOST = 'https://orxid.in.ua'
-WEBHOOK_PATH = '/prod_orxmstat'
-WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
-
-# webserver settings
-WEBAPP_HOST = '0.0.0.0'  # or ip 127.0.0.1
-WEBAPP_PORT = 3004
+router = Router()
+dp = Dispatcher()
+dp.include_router(router)
 
 
-##--------------Машини станів----------------------------##
-class FSMzapAM(StatesGroup):
-    vuruhka = State()
+class RevenueAM(StatesGroup):
+    amount = State()
 
 
-class FSMzapPM(StatesGroup):
-    vuruhka = State()
+class RevenuePM(StatesGroup):
+    amount = State()
 
 
-class FSMzapCredet(StatesGroup):
-    cash = State()
+class Expense(StatesGroup):
+    amount = State()
     description = State()
 
 
-##---------------------Midelware-------------------------------##
-class MidlWare(BaseMiddleware):
-    async def on_process_update(self, update: types.Update, date: dict):
-        logger.debug(update)
-        logger.debug(update.message.from_user.id)
-        if update.message.from_user.id not in ADMIN_ID:
-            logger.debug(f"Хтось лівий зайшов {update.message.from_user.id}")
-            raise CancelHandler()
+class AdminOnlyMiddleware(BaseMiddleware):
+    async def __call__(self, handler, event: types.Message, data: dict):
+        if event.from_user and event.from_user.id in ADMIN_IDS:
+            return await handler(event, data)
+        logger.warning("Unauthorized user: {}", event.from_user.id if event.from_user else None)
+        return None
 
 
-##-------------------handlers--------------------------------------##
-@dp.message_handler(commands=['start', 'help'], state=None)
+router.message.middleware(AdminOnlyMiddleware())
+
+
+@router.message(Command("start", "help"), StateFilter(None))
 async def send_welcome(message: types.Message):
     await message.reply("Вітаю! Щоб розпочати натисніть кнопку внизу!", reply_markup=markup)
 
 
-##--------------------------до обіду виручка------------------------##
-# @dp.message_handler(commands=['Виручка_до_обіду'],state=None)
-@dp.message_handler(filters.Text(equals="Виручка до обіду 💵"), state=None)
-async def cash_toAM(message: types.Message):
-    await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
-    await FSMzapAM.vuruhka.set()
+@router.message(F.text == "Виручка до обіду 💵", StateFilter(None))
+async def cash_to_am(message: types.Message, state: FSMContext):
+    await state.set_state(RevenueAM.amount)
     await message.answer("Напишіть вашу обідню виручку💵:", reply_markup=ReplyKeyboardRemove())
 
 
-@dp.message_handler(content_types=[types.ContentType.TEXT], state=FSMzapAM.vuruhka)
-async def f_cash(message: types.Message, state: FSMContext):
-    await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
-    async with state.proxy() as data:
-        data['viruhka'] = message.text
-    logger.debug(f"Виручка - {message.text}")
-    BotBDnew.recAM(data['viruhka'])
-    await bot.send_message(conf.ADMIN_ULIA, f"Виручку {data['viruhka']}грн внесено!", reply_markup=markup)
-    await bot.send_message(conf.ADMIN_SERG, f"Виручку {data['viruhka']}грн внесено!", reply_markup=markup)
-    # await message.answer(f"Виручку {data['viruhka']}грн внесено!",reply_markup=markup)
-    await state.finish()
+@router.message(RevenueAM.amount, F.text)
+async def save_am(message: types.Message, state: FSMContext, bot: Bot):
+    BotBDnew.recAM(message.text)
+    for admin_id in ADMIN_IDS:
+        await bot.send_message(admin_id, f"Виручку {message.text}грн внесено!", reply_markup=markup)
+    await state.clear()
 
 
-##--------------------------після обіду виручка------------------------##
-@dp.message_handler(filters.Text(equals="Виручка після обіду 💶"), state=None)
-async def cash_afterPM(message: types.Message):
-    await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
-    await FSMzapPM.vuruhka.set()
+@router.message(F.text == "Виручка після обіду 💶", StateFilter(None))
+async def cash_after_pm(message: types.Message, state: FSMContext):
+    await state.set_state(RevenuePM.amount)
     await message.answer("Напишіть вашу виручку в кінці дня:", reply_markup=ReplyKeyboardRemove())
 
 
-@dp.message_handler(content_types=[types.ContentType.TEXT], state=FSMzapPM.vuruhka)
-async def get_pokaznik(message: types.Message, state: FSMContext):
-    await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
-    async with state.proxy() as data:
-        data['viruhka'] = message.text
-    logger.debug(f"Виручка - {message.text}")
-    BotBDnew.recPM(data['viruhka'])
-    await bot.send_message(conf.ADMIN_ULIA, f"Виручку {data['viruhka']}грн внесено!", reply_markup=markup)
-    await bot.send_message(conf.ADMIN_SERG, f"Виручку {data['viruhka']}грн внесено!", reply_markup=markup)
-    # await message.answer(f"Виручку {data['viruhka']}грн внесено!",reply_markup=markup)
-    await state.finish()
+@router.message(RevenuePM.amount, F.text)
+async def save_pm(message: types.Message, state: FSMContext, bot: Bot):
+    BotBDnew.recPM(message.text)
+    for admin_id in ADMIN_IDS:
+        await bot.send_message(admin_id, f"Виручку {message.text}грн внесено!", reply_markup=markup)
+    await state.clear()
 
 
-##--------------------------видатки-----------------------##
-@dp.message_handler(filters.Text(equals="Видатки"), state=None)
-async def credet(message: types.Message):
-    await FSMzapCredet.cash.set()
-    await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
+@router.message(F.text == "Видатки", StateFilter(None))
+async def expense_start(message: types.Message, state: FSMContext):
+    await state.set_state(Expense.amount)
     await message.answer("Напишіть суму:", reply_markup=ReplyKeyboardRemove())
 
 
-@dp.message_handler(content_types=[types.ContentType.TEXT], state=FSMzapCredet.cash)
-async def getcash(message: types.Message, state: FSMContext):
-    await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
-    async with state.proxy() as data:
-        data['viruhka'] = message.text
-    logger.debug(f"Витрати - {message.text}")
-    await message.answer(f"Опишіть за що саме:")
-    await FSMzapCredet.next()
+@router.message(Expense.amount, F.text)
+async def expense_amount(message: types.Message, state: FSMContext):
+    await state.update_data(amount=message.text)
+    await state.set_state(Expense.description)
+    await message.answer("Опишіть за що саме:")
 
 
-@dp.message_handler(content_types=[types.ContentType.TEXT], state=FSMzapCredet.description)
-async def description(message: types.Message, state: FSMContext):
-    await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
-    async with state.proxy() as data:
-        data['desr'] = message.text
-    logger.debug(f"Опис - {message.text}")
-    BotBDnew.recCredet(data['viruhka'], data["desr"])
-    await message.answer(f"Витрати {data['desr']} {data['viruhka']} внесено", reply_markup=markup)
-    await state.finish()
+@router.message(Expense.description, F.text)
+async def expense_description(message: types.Message, state: FSMContext):
+    data = await state.get_data()
+    BotBDnew.recCredet(data["amount"], message.text)
+    await message.answer(f"Витрати {message.text} {data['amount']} внесено", reply_markup=markup)
+    await state.clear()
 
 
-##----------------------Статистика------------------------##
-@dp.message_handler(filters.Text(equals="Статистика за місяць 📊"), state=None)
-async def month_statistic(message: types.Message):
-    await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
-    now = datetime.datetime.now()
-    te = BotBDnew.statOfMonth(month=now.month, year=now.year)
-    doc = open('testplor.png', 'rb')
-    await message.answer(te)
-    await message.reply_photo(doc)
+async def send_month(message: types.Message, month: int, year: int):
+    report, image = BotBDnew.statOfMonth(month=month, year=year)
+    await message.answer(report)
+    if image:
+        await message.reply_photo(BufferedInputFile(image, filename="statistics.png"))
 
 
-@dp.message_handler(filters.Text(equals="Минулий місяць"), state=None)
-async def month_statistic(message: types.Message):
-    await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
-    now = datetime.datetime.now()
-    month = now.month
-    year = now.year
-    if month > 1:
-        month = now.month - 1
-    else:
-        year = now.year - 1
-        month =12
-
-    te = BotBDnew.statOfMonth(month=month, year=year)
-    doc = open('testplor.png', 'rb')
-    await message.answer(te)
-    await message.reply_photo(doc)
+@router.message(F.text == "Статистика за місяць 📊", StateFilter(None))
+async def current_month(message: types.Message):
+    today = datetime.date.today()
+    await send_month(message, today.month, today.year)
 
 
-@dp.message_handler(filters.Text(equals="Рік"), state=None)
-async def month_statistic(message: types.Message):
-    now = datetime.datetime.now()
-    month = now.month
-    year = now.year
-    for month in range(1, month + 1):
-        await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
-        te = BotBDnew.statOfMonth(month=month, year=year)
+@router.message(F.text == "Минулий місяць", StateFilter(None))
+async def previous_month(message: types.Message):
+    first_day = datetime.date.today().replace(day=1)
+    previous = first_day - datetime.timedelta(days=1)
+    await send_month(message, previous.month, previous.year)
+
+
+@router.message(F.text == "Рік", StateFilter(None))
+async def year_statistics(message: types.Message):
+    today = datetime.date.today()
+    for month in range(1, today.month + 1):
+        _, image = BotBDnew.statOfMonth(month=month, year=today.year)
+        if image:
+            await message.reply_photo(BufferedInputFile(image, filename=f"{month}.png"))
+    await message.answer(BotBDnew.statAllYear(year=today.year))
+
+
+@router.message(StateFilter(None))
+async def echo(message: types.Message):
+    await message.answer("Не розумію", reply_markup=markup)
+
+
+async def on_startup(bot: Bot):
+    global reminder_task
+    await bot.set_webhook(
+        WEBHOOK_URL,
+        secret_token=WEBHOOK_SECRET,
+        allowed_updates=dp.resolve_used_update_types(),
+    )
+    reminder_task = asyncio.create_task(reminder_loop(bot))
+    logger.info("Webhook configured: {}", WEBHOOK_URL)
+
+
+async def on_shutdown(**kwargs):
+    if reminder_task:
+        reminder_task.cancel()
         try:
-            doc = open('testplor.png', 'rb')
-            # await message.answer(te)
-            await message.reply_photo(doc)
-        except:
+            await reminder_task
+        except asyncio.CancelledError:
             pass
 
-    await bot.send_chat_action(chat_id=message.from_user.id, action="typing")
-    te = BotBDnew.statAllYear(year=year)
-    doc = open('testplor.png', 'rb')
-    await message.answer(te)
-    # await message.reply_photo(doc)
+
+def next_reminder(now: datetime.datetime) -> datetime.datetime:
+    for day_offset in range(8):
+        day = now.date() + datetime.timedelta(days=day_offset)
+        if day.weekday() >= 6:
+            continue
+        for hour in (12, 17):
+            candidate = datetime.datetime.combine(
+                day, datetime.time(hour, 50), tzinfo=KYIV
+            )
+            if candidate > now:
+                return candidate
+    raise RuntimeError("Could not find the next reminder")
 
 
-##----------------------------Різне----------------------##
-@dp.message_handler()
-async def echo(message: types.Message):
-    if message.text == "Файл12":
-        doc = open('debug.txt', 'rb')
-        await message.reply_document(doc)
-    elif message.text == "req":
-        pass
-    else:
-        await message.answer("Не розумію", reply_markup=markup)
+async def reminder_loop(bot: Bot):
+    while True:
+        now = datetime.datetime.now(KYIV)
+        scheduled = next_reminder(now)
+        await asyncio.sleep(max(0, (scheduled - now).total_seconds()))
+        for admin_id in ADMIN_IDS:
+            try:
+                await bot.send_message(admin_id, "Нагадування - запишіть вашу виручку💶!")
+            except Exception:
+                logger.exception("Failed to send reminder to {}", admin_id)
 
 
-##-------------------Запуск бота-------------------------##
-if TEST_MODE:
-    print("Bot running")
-    dp.middleware.setup(MidlWare())
-    executor.start_polling(dp, skip_updates=True)
-else:
-    async def on_startup(dp):
-        await bot.set_webhook(WEBHOOK_URL)
-        logger.debug("Бот запущено")
+async def health(request: web.Request):
+    return web.Response(text="ok")
 
 
-    async def on_shutdown(dp):
-        logger.debug('Зупиняюся..')
-        await bot.delete_webhook()
-        await dp.storage.close()
-        await dp.storage.wait_closed()
+def main():
+    db.connect(reuse_if_open=True)
+    db.create_tables([Stat, Credet])
+    bot = Bot(token=TOKEN)
+    dp.startup.register(on_startup)
+    dp.shutdown.register(on_shutdown)
+    app = web.Application()
+    app.router.add_get("/health", health)
+    SimpleRequestHandler(
+        dispatcher=dp, bot=bot, secret_token=WEBHOOK_SECRET
+    ).register(app, path=WEBHOOK_PATH)
+    setup_application(app, dp, bot=bot)
+    web.run_app(app, host="0.0.0.0", port=WEBAPP_PORT)
 
 
-    if __name__ == '__main__':
-        dp.middleware.setup(MidlWare())
-        start_webhook(
-            dispatcher=dp,
-            webhook_path=WEBHOOK_PATH,
-            on_startup=on_startup,
-            on_shutdown=on_shutdown,
-            skip_updates=True,
-            host=WEBAPP_HOST,
-            port=WEBAPP_PORT,
-        )
+if __name__ == "__main__":
+    main()

@@ -1,11 +1,16 @@
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from io import BytesIO
 import numpy as np
 import datetime
 from statistics import mean
+import os
 import os.path
 from peewee import *
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.getenv("DATA_DIR", os.path.dirname(os.path.abspath(__file__)))
+os.makedirs(BASE_DIR, exist_ok=True)
 db_path = os.path.join(BASE_DIR, "botBD.db")
 db = SqliteDatabase(db_path)
 
@@ -23,7 +28,10 @@ def diagramBuilder(datalabels, cash_viruhka, cash_vudatku, month_interval):
     ax.bar_label(rects1, padding=2)  # це відступ від тексту до цифри
     ax.bar_label(rects2, padding=2)
     fig.tight_layout()
-    plt.savefig("testplor.png")
+    image = BytesIO()
+    fig.savefig(image, format="png")
+    plt.close(fig)
+    return image.getvalue()
 
 
 class Stat(Model):
@@ -82,9 +90,8 @@ class BotBDnew(Stat):
     @staticmethod
     def statOfMonth(month, year) -> str:
 
-        now = datetime.datetime.now()
-        # now = now.replace(month=month, year=year)
         st = "Статистика\n"
+        chart = None
         cash_viruhka = []
         cash_vudatku = []
         datalabels = []
@@ -116,9 +123,9 @@ class BotBDnew(Stat):
             st += f"\nВиручка за місяць {monthcash}\nВитрати за місяць {monthredet}\n\n" \
                   f"MAX виручка {max(cash_viruhka)} грн.\nMIN виручка {min(cash_viruhka)} грн.\n" \
                   f"Середня виручка {round(mean(cash_viruhka))} грн."
-            diagramBuilder(datalabels, cash_viruhka, cash_vudatku, month_interval=f"{month} місяць {monthcash} грн")
+            chart = diagramBuilder(datalabels, cash_viruhka, cash_vudatku, month_interval=f"{month} місяць {monthcash} грн")
 
-        return st
+        return st, chart
 
     @staticmethod
     def statAllYear(year) -> str:
