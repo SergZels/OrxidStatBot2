@@ -13,9 +13,9 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --no-index --find-links=/wheels -r requirements.txt \
     && rm -rf /wheels \
     && groupadd --gid 10001 bot && useradd --uid 10001 --gid bot --no-create-home bot
-COPY bot.py ./
+COPY bot.py dashboard.py dashboard.html dashboard.css dashboard.js ./
 COPY bd ./bd
 COPY keyboards ./keyboards
 USER bot
-EXPOSE 3004
+EXPOSE 3004 3005
 CMD ["python", "bot.py"]

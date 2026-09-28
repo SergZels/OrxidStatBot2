@@ -1,6 +1,7 @@
 services:
   bot:
     build: .
+    image: orxidstatbotv2-bot
     restart: unless-stopped
     env_file: .env
     environment:
@@ -16,3 +17,29 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
+  dashboard:
+    image: orxidstatbotv2-bot
+    command: ["python", "dashboard.py"]
+    restart: unless-stopped
+    network_mode: host
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      DATA_DIR: /data
+      TZ: Europe/Kyiv
+      DASHBOARD_HOST: 192.168.1.10
+      DASHBOARD_PORT: 3005
+      DASHBOARD_ALLOWED_CIDR: 192.168.1.0/24
+    volumes:
+      - ./data:/data:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://192.168.1.10:3005/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

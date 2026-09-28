@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <title>Orxid · Аналітика</title>
+  <link rel="stylesheet" href="/dashboard.css">
+  <script src="/dashboard.js" defer></script>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div><strong>Orxid</strong><small>Статистика магазину</small></div>
+      </div>
+      <div class="network-pill"><span class="status-dot"></span>Локальна мережа</div>
+    </header>
+
+    <main>
+      <section class="intro">
+        <div>
+          <p class="eyebrow">АНАЛІТИКА ПРОДАЖІВ</p>
+          <h1>Вся картина <em>в одному місці.</em></h1>
+          <p class="intro-copy">Виручка, витрати й динаміка роботи магазину — без таблиць і ручних підрахунків.</p>
+        </div>
+        <div class="filters" aria-label="Оберіть період">
+          <label>Місяць<select id="month" aria-label="Місяць"></select></label>
+          <label>Рік<select id="year" aria-label="Рік"></select></label>
+          <button id="refresh" type="button" aria-label="Оновити дані" title="Оновити дані">↻</button>
+        </div>
+      </section>
+
+      <div id="error" class="error" role="alert" hidden></div>
+
+      <section class="metrics" aria-label="Показники за місяць">
+        <article class="metric revenue">
+          <div class="metric-icon" aria-hidden="true">↗</div>
+          <p>Виручка</p><strong id="revenue">—</strong><small>за обраний місяць</small>
+        </article>
+        <article class="metric expenses">
+          <div class="metric-icon" aria-hidden="true">↘</div>
+          <p>Витрати</p><strong id="expenses">—</strong><small>за обраний місяць</small>
+        </article>
+        <article class="metric balance">
+          <div class="metric-icon" aria-hidden="true">◇</div>
+          <p>Різниця</p><strong id="balance">—</strong><small>виручка мінус витрати</small>
+        </article>
+        <article class="metric average">
+          <div class="metric-icon" aria-hidden="true">≈</div>
+          <p>Середня виручка</p><strong id="average">—</strong><small>за день із продажами</small>
+        </article>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="panel daily-panel">
+          <div class="panel-heading">
+            <div><p class="eyebrow">ДЕНЬ ЗА ДНЕМ</p><h2>Рух коштів</h2><p id="daily-subtitle" class="subtle">—</p></div>
+            <div class="legend"><span><i class="legend-revenue"></i>Виручка</span><span><i class="legend-expenses"></i>Витрати</span></div>
+          </div>
+          <div class="chart-scroll"><svg id="daily-chart" viewBox="0 0 900 280" role="img" aria-label="Графік виручки та витрат за днями місяця"></svg></div>
+        </article>
+
+        <article class="panel split-panel">
+          <div class="panel-heading"><div><p class="eyebrow">БАЛАНС МІСЯЦЯ</p><h2>Виручка й витрати</h2></div></div>
+          <div class="donut-wrap">
+            <div id="donut" class="donut" role="img" aria-label="Частка виручки і витрат"><div class="donut-inner"><span>Залишок</span><strong id="donut-balance">—</strong></div></div>
+          </div>
+          <div class="split-row"><span><i class="legend-revenue"></i>Виручка</span><strong id="split-revenue">—</strong></div>
+          <div class="split-row"><span><i class="legend-expenses"></i>Витрати</span><strong id="split-expenses">—</strong></div>
+          <div class="split-foot"><span id="active-days">—</span><span id="best-day">—</span></div>
+        </article>
+
+        <article class="panel year-panel">
+          <div class="panel-heading">
+            <div><p class="eyebrow">ПРОТЯГОМ РОКУ</p><h2>Динаміка за місяцями</h2><p class="subtle">Порівняння виручки й витрат</p></div>
+            <div class="legend"><span><i class="legend-revenue"></i>Виручка</span><span><i class="legend-expenses"></i>Витрати</span></div>
+          </div>
+          <div class="chart-scroll"><svg id="year-chart" viewBox="0 0 900 280" role="img" aria-label="Графік виручки та витрат за місяцями року"></svg></div>
+        </article>
+
+        <article class="panel recent-panel">
+          <div class="panel-heading"><div><p class="eyebrow">ОСТАННІ ЗАПИСИ</p><h2>Витрати</h2></div></div>
+          <div id="recent-list" class="recent-list"><p class="empty">Завантаження…</p></div>
+        </article>
+      </section>
+    </main>
+    <footer>Orxid · Дані оновлюються з бази бота <span id="updated-at"></span></footer>
+  </div>
+</body>
+</html>
