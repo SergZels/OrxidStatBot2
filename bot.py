@@ -24,6 +24,7 @@ WEBHOOK_URL = os.getenv("WEBHOOK_URL", "https://orxid.in.ua/prod_orxmstat")
 WEBHOOK_PATH = "/" + WEBHOOK_URL.split("/", 3)[-1].lstrip("/")
 WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET") or None
 WEBAPP_PORT = int(os.getenv("PORT", "3004"))
+DASHBOARD_URL = os.getenv("DASHBOARD_URL", "http://192.168.1.10:3005/").rstrip("/") + "/"
 KYIV = ZoneInfo("Europe/Kyiv")
 reminder_task = None
 
@@ -58,7 +59,20 @@ router.message.middleware(AdminOnlyMiddleware())
 
 @router.message(Command("start", "help"), StateFilter(None))
 async def send_welcome(message: types.Message):
-    await message.reply("Вітаю! Щоб розпочати натисніть кнопку внизу!", reply_markup=markup)
+    await message.reply(
+        "Вітаю! Щоб розпочати натисніть кнопку внизу!\n"
+        f"Графіки: {DASHBOARD_URL} (доступно лише в локальній мережі).",
+        reply_markup=markup,
+    )
+
+
+@router.message(F.text == "🌐 Веб-панель", StateFilter(None))
+async def dashboard_link(message: types.Message):
+    await message.answer(
+        f"Панель із графіками: {DASHBOARD_URL}\n"
+        "Відкрийте посилання з пристрою в локальній мережі.",
+        reply_markup=markup,
+    )
 
 
 @router.message(F.text == "Виручка до обіду 💵", StateFilter(None))
