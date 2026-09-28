@@ -14,10 +14,10 @@ from bd.bdnew import BotBDnew
 from loguru import logger
 from aiogram.utils.executor import start_webhook
 
-TEST_MODE = True
+TEST_MODE = False
 
-if conf.VPS:
-    TEST_MODE = False
+# if conf.VPS:
+#     TEST_MODE = False
 
 ##------------------Блок ініціалізації-----------------##
 if TEST_MODE:
@@ -32,7 +32,7 @@ dp = Dispatcher(bot, storage=storage)
 botbdnew = BotBDnew()
 logger.add("debug.txt")
 # webhook settings
-WEBHOOK_HOST = 'https://vmi957205.contaboserver.net'
+WEBHOOK_HOST = 'https://orxid.in.ua'
 WEBHOOK_PATH = '/prod_orxmstat'
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
