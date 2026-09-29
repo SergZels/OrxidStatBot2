@@ -126,6 +126,137 @@ def load_statistics(year: int, month: int) -> dict:
     }
 
 
+def revenue_reports(rows, today: dt.date, base_year: int, compare_year: int) -> dict:
+    """Build revenue-only reports from daily rows (date, amount)."""
+    revenue = {
+        dt.date.fromisoformat(date): int(amount or 0)
+        for date, amount in rows
+    }
+    first_record = min(revenue, default=today)
+    years = []
+    for year in range(first_record.year, today.year + 1):
+        months = [0] * 12
+        for date, amount in revenue.items():
+            if date.year == year:
+                months[date.month - 1] += amount
+        full = first_record <= dt.date(year, 1, 1) and year < today.year
+        years.append({
+            "year": year,
+            "total": sum(months),
+            "months": months,
+            "status": "full" if full else ("current" if year == today.year else "initial"),
+            "change": None,
+            "percent": None,
+        })
+        if len(years) > 1 and full and years[-2]["status"] == "full":
+            previous = years[-2]["total"]
+            years[-1]["change"] = years[-1]["total"] - previous
+            years[-1]["percent"] = round(
+                (years[-1]["change"] / previous) * 100, 1
+            ) if previous else None
+
+    season_totals = {}
+    for date, amount in revenue.items():
+        if date.month >= 10:
+            start_year, index = date.year, date.month - 10
+        elif date.month <= 4:
+            start_year, index = date.year - 1, date.month + 2
+        else:
+            continue
+        season_totals.setdefault(start_year, [0] * 7)[index] += amount
+    seasons = []
+    for start_year, months in sorted(season_totals.items()):
+        start = dt.date(start_year, 10, 1)
+        end = dt.date(start_year + 1, 4, 30)
+        full = first_record <= start and today > end
+        season = {
+            "start_year": start_year,
+            "label": f"{start_year}/{str(start_year + 1)[-2:]}",
+            "total": sum(months),
+            "months": months,
+            "status": "full" if full else ("current" if today <= end else "initial"),
+            "change": None,
+            "percent": None,
+        }
+        if (seasons and full and seasons[-1]["status"] == "full"
+                and seasons[-1]["start_year"] == start_year - 1):
+            previous = seasons[-1]["total"]
+            season["change"] = season["total"] - previous
+            season["percent"] = round(
+                (season["change"] / previous) * 100, 1
+            ) if previous else None
+        seasons.append(season)
+
+    if not first_record.year <= base_year <= today.year:
+        raise ValueError("Invalid base year")
+    if not first_record.year <= compare_year <= today.year or base_year == compare_year:
+        raise ValueError("Invalid comparison year")
+    start_month, start_day = (
+        (first_record.month, first_record.day)
+        if first_record.year in (base_year, compare_year) else (1, 1)
+    )
+    end_month, end_day = (
+        (today.month, today.day)
+        if today.year in (base_year, compare_year) else (12, 31)
+    )
+    available = (start_month, start_day) <= (end_month, end_day)
+    if available:
+        # Use the same calendar day in both years, including around leap years.
+        start_day = min(start_day, *(calendar.monthrange(y, start_month)[1]
+                                     for y in (base_year, compare_year)))
+        end_day = min(end_day, *(calendar.monthrange(y, end_month)[1]
+                                 for y in (base_year, compare_year)))
+    comparison_months = []
+    totals = {base_year: 0, compare_year: 0}
+    for month in range(1, 13):
+        item = {"month": month, "base": 0, "compare": 0}
+        if available:
+            for year, key in ((base_year, "base"), (compare_year, "compare")):
+                start = dt.date(year, start_month, start_day)
+                end = dt.date(year, end_month, end_day)
+                item[key] = sum(
+                    amount for date, amount in revenue.items()
+                    if date.year == year and date.month == month and start <= date <= end
+                )
+                totals[year] += item[key]
+        comparison_months.append(item)
+    base_total, compare_total = totals[base_year], totals[compare_year]
+    change = compare_total - base_total if available else None
+    percent = round(change / base_total * 100, 1) if available and base_total else None
+    return {
+        "as_of": today.isoformat(),
+        "first_record": first_record.isoformat(),
+        "seasons": seasons,
+        "years": years,
+        "comparison": {
+            "base_year": base_year,
+            "compare_year": compare_year,
+            "available": available,
+            "base_total": base_total,
+            "compare_total": compare_total,
+            "change": change,
+            "percent": percent,
+            "window": {
+                "start_month": start_month,
+                "start_day": start_day,
+                "end_month": end_month,
+                "end_day": end_day,
+            },
+            "months": comparison_months,
+        },
+    }
+
+
+def load_reports(base_year: int, compare_year: int) -> dict:
+    with closing(sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True)) as db:
+        db.execute("PRAGMA query_only=ON")
+        rows = db.execute(
+            """SELECT date, SUM(cashAM + cashPM)
+               FROM stat GROUP BY date ORDER BY date"""
+        ).fetchall()
+    return revenue_reports(rows, dt.datetime.now(KYIV).date(), base_year, compare_year)
+
+
 async def home(request: web.Request):
     return web.FileResponse(BASE_DIR / "dashboard.html")
 
@@ -138,6 +269,18 @@ async def script(request: web.Request):
     return web.FileResponse(BASE_DIR / "dashboard.js")
 
 
+async def reports_page(request: web.Request):
+    return web.FileResponse(BASE_DIR / "reports.html")
+
+
+async def reports_stylesheet(request: web.Request):
+    return web.FileResponse(BASE_DIR / "reports.css")
+
+
+async def reports_script(request: web.Request):
+    return web.FileResponse(BASE_DIR / "reports.js")
+
+
 async def statistics(request: web.Request):
     today = dt.datetime.now(KYIV)
     try:
@@ -148,6 +291,17 @@ async def statistics(request: web.Request):
     except ValueError:
         raise web.HTTPBadRequest(text="Invalid year or month")
     return web.json_response(load_statistics(year, month))
+
+
+async def reports_data(request: web.Request):
+    today = dt.datetime.now(KYIV).date()
+    try:
+        base_year = int(request.query.get("base", today.year - 1))
+        compare_year = int(request.query.get("compare", today.year))
+        data = load_reports(base_year, compare_year)
+    except ValueError:
+        raise web.HTTPBadRequest(text="Invalid year selection")
+    return web.json_response(data)
 
 
 async def health(request: web.Request):
@@ -165,7 +319,11 @@ def main():
     app.router.add_get("/", home)
     app.router.add_get("/dashboard.css", stylesheet)
     app.router.add_get("/dashboard.js", script)
+    app.router.add_get("/reports", reports_page)
+    app.router.add_get("/reports.css", reports_stylesheet)
+    app.router.add_get("/reports.js", reports_script)
     app.router.add_get("/api/stats", statistics)
+    app.router.add_get("/api/reports", reports_data)
     app.router.add_get("/health", health)
     web.run_app(app, host=HOST, port=PORT)
 

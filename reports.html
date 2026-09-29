@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <title>Orxid · Звіти з виручки</title>
+  <link rel="stylesheet" href="/dashboard.css">
+  <link rel="stylesheet" href="/reports.css">
+  <script src="/reports.js" defer></script>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div><strong>Orxid</strong><small>Статистика магазину</small></div>
+      </div>
+      <nav class="main-nav" aria-label="Розділи панелі">
+        <a href="/">Огляд</a>
+        <a class="active" href="/reports" aria-current="page">Звіти</a>
+      </nav>
+      <div class="network-pill"><span class="status-dot"></span>Локальна мережа</div>
+    </header>
+
+    <main class="reports-page">
+      <section class="reports-intro">
+        <p class="eyebrow">ЗВІТИ З ВИРУЧКИ</p>
+        <h1>Як змінюється <em>виручка.</em></h1>
+        <p class="intro-copy">Окремо за сезонами, календарними роками та однаковими проміжками двох років.</p>
+        <div class="data-note">
+          <span class="note-mark" aria-hidden="true">i</span>
+          <span id="data-note">Рахуємо виручку до вирахування витрат. Завантаження даних…</span>
+        </div>
+      </section>
+
+      <div id="report-error" class="error" role="alert" hidden></div>
+
+      <section class="report-highlights" aria-label="Головні показники">
+        <article class="report-highlight green">
+          <span class="highlight-kicker">ОСТАННІЙ ЗАВЕРШЕНИЙ СЕЗОН</span>
+          <strong id="highlight-season-total">—</strong>
+          <span id="highlight-season-label" class="highlight-label">—</span>
+          <span id="highlight-season-change" class="highlight-change">—</span>
+        </article>
+        <article class="report-highlight violet">
+          <span class="highlight-kicker">ОСТАННІЙ ПОВНИЙ РІК</span>
+          <strong id="highlight-year-total">—</strong>
+          <span id="highlight-year-label" class="highlight-label">—</span>
+          <span id="highlight-year-change" class="highlight-change">—</span>
+        </article>
+        <article class="report-highlight coral">
+          <span class="highlight-kicker">ОБРАНІ РОКИ · ОДНАКОВИЙ ПЕРІОД</span>
+          <strong id="highlight-compare-delta">—</strong>
+          <span id="highlight-compare-label" class="highlight-label">—</span>
+          <span id="highlight-compare-percent" class="highlight-change">—</span>
+        </article>
+      </section>
+
+      <section class="panel report-section" aria-labelledby="season-title">
+        <div class="report-heading">
+          <div>
+            <p class="eyebrow">01 / СЕЗОН ДО СЕЗОНУ</p>
+            <h2 id="season-title">Сезонна виручка</h2>
+            <p class="subtle">Один сезон — від 1 жовтня до 30 квітня наступного року.</p>
+          </div>
+          <span class="section-chip">ЖОВТЕНЬ → КВІТЕНЬ</span>
+        </div>
+        <div class="chart-scroll"><svg id="season-chart" viewBox="0 0 940 310" role="img" aria-label="Виручка за сезонами"></svg></div>
+        <div class="report-divider"></div>
+        <h3>Деталі сезонів</h3>
+        <div id="season-list" class="season-list"></div>
+      </section>
+
+      <section class="panel report-section" aria-labelledby="year-title">
+        <div class="report-heading">
+          <div>
+            <p class="eyebrow">02 / РІК ЗА РОКОМ</p>
+            <h2 id="year-title">Календарні роки</h2>
+            <p class="subtle">Виручка з 1 січня до 31 грудня. Неповні роки позначено окремо.</p>
+          </div>
+          <span class="section-chip">СІЧЕНЬ → ГРУДЕНЬ</span>
+        </div>
+        <div class="chart-scroll"><svg id="annual-chart" viewBox="0 0 940 310" role="img" aria-label="Виручка за календарними роками"></svg></div>
+        <div class="report-divider"></div>
+        <div id="year-list" class="year-list"></div>
+      </section>
+
+      <section class="panel report-section" aria-labelledby="compare-title">
+        <div class="report-heading compare-heading">
+          <div>
+            <p class="eyebrow">03 / РІК ДО РОКУ</p>
+            <h2 id="compare-title">Порівняння двох років</h2>
+            <p id="compare-period" class="subtle">Для обох років береться однаковий проміжок дат.</p>
+          </div>
+          <div class="compare-controls" aria-label="Оберіть роки для порівняння">
+            <label>Базовий рік<select id="base-year" aria-label="Базовий рік"></select></label>
+            <span aria-hidden="true">→</span>
+            <label>Порівняти з<select id="compare-year" aria-label="Рік для порівняння"></select></label>
+          </div>
+        </div>
+        <div class="compare-totals">
+          <div><span id="base-total-label">Базовий рік</span><strong id="base-total">—</strong></div>
+          <div><span id="compare-total-label">Рік порівняння</span><strong id="compare-total">—</strong></div>
+          <div><span>Зміна виручки</span><strong id="compare-delta">—</strong><small id="compare-percent">—</small></div>
+        </div>
+        <div class="compare-legend"><span><i class="compare-base-dot"></i><b id="legend-base">—</b></span><span><i class="compare-new-dot"></i><b id="legend-compare">—</b></span></div>
+        <div class="chart-scroll"><svg id="compare-chart" viewBox="0 0 940 310" role="img" aria-label="Помісячне порівняння виручки двох років"></svg></div>
+        <div class="report-divider"></div>
+        <div class="comparison-table-wrap">
+          <table class="comparison-table">
+            <thead><tr><th>Місяць</th><th id="table-base">Базовий</th><th id="table-compare">Порівняння</th><th>Зміна</th></tr></thead>
+            <tbody id="comparison-rows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    <footer>Orxid · Звіт побудовано з бази бота <span id="reports-updated"></span></footer>
+  </div>
+</body>
+</html>
