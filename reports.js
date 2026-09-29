@@ -10,6 +10,7 @@ const MONTHS_GENITIVE = [
 ];
 const SHORT_MONTHS = ["Січ", "Лют", "Бер", "Кві", "Тра", "Чер", "Лип", "Сер", "Вер", "Жов", "Лис", "Гру"];
 const SEASON_MONTHS = ["Жов", "Лис", "Гру", "Січ", "Лют", "Бер", "Кві"];
+const OFFSEASON_MONTHS = ["Тра", "Чер", "Лип", "Сер", "Вер"];
 const number = new Intl.NumberFormat("uk-UA", { maximumFractionDigits: 0 });
 const decimal = new Intl.NumberFormat("uk-UA", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const baseSelect = document.querySelector("#base-year");
@@ -39,7 +40,7 @@ function grid(maximum) {
   return output;
 }
 
-function drawBars(svgId, values, key, label, barClass) {
+function drawBars(svgId, values, label, barClass) {
   const svg = document.querySelector(svgId);
   if (!values.length) {
     svg.innerHTML = '<text class="axis-label" x="470" y="150" text-anchor="middle">Немає даних</text>';
@@ -72,22 +73,22 @@ function growthText(period) {
   return `${signedCash(period.change)} · ${signedPercent(period.percent)}`;
 }
 
-function renderSeasons(seasons) {
-  drawBars("#season-chart", seasons, "start_year", item => item.label, "bar-season");
-  const list = document.querySelector("#season-list");
+function renderPeriods(periods, chartId, listId, label, barClass, monthLabels, miniClass) {
+  drawBars(chartId, periods, label, barClass);
+  const list = document.querySelector(listId);
   list.replaceChildren();
-  seasons.forEach(season => {
+  periods.forEach(period => {
     const card = createText("article", "season-card", "");
     const top = createText("div", "season-card-top", "");
-    top.append(createText("span", "season-card-title", season.label));
-    const status = createText("span", `period-status ${season.status === "full" ? "" : "partial"}`,
-      season.status === "full" ? "Завершено" : season.status === "current" ? "Триває" : "Початок даних");
+    top.append(createText("span", "season-card-title", label(period)));
+    const status = createText("span", `period-status ${period.status === "full" ? "" : "partial"}`,
+      period.status === "full" ? "Завершено" : period.status === "current" ? "Триває" : "Початок даних");
     top.append(status);
-    card.append(top, createText("strong", "", cash(season.total)));
-    card.append(createText("span", `growth ${season.change == null ? "tone-neutral" : tone(season.change)}`, growthText(season)));
-    const mini = createText("div", "season-mini", "");
-    const peak = Math.max(1, ...season.months);
-    season.months.forEach(value => {
+    card.append(top, createText("strong", "", cash(period.total)));
+    card.append(createText("span", `growth ${period.change == null ? "tone-neutral" : tone(period.change)}`, growthText(period)));
+    const mini = createText("div", `season-mini ${miniClass}`, "");
+    const peak = Math.max(1, ...period.months);
+    period.months.forEach(value => {
       const bar = document.createElement("span");
       bar.style.height = `${Math.max(3, value / peak * 38)}px`;
       bar.title = cash(value);
@@ -95,25 +96,32 @@ function renderSeasons(seasons) {
     });
     card.append(mini);
     const labels = createText("div", "season-month-labels", "");
-    SEASON_MONTHS.forEach(value => labels.append(createText("span", "", value)));
+    monthLabels.forEach(value => labels.append(createText("span", "", value)));
     card.append(labels);
     list.append(card);
   });
 }
 
 function renderYears(years) {
-  drawBars("#annual-chart", years, "year", item => item.year, "bar-annual");
+  drawBars("#annual-chart", years, item => item.year, "bar-annual");
   const list = document.querySelector("#year-list");
   list.replaceChildren();
   const max = Math.max(1, ...years.map(item => item.total));
   years.forEach(year => {
     const row = createText("div", "year-row", "");
     row.append(createText("strong", "", String(year.year)));
-    const track = createText("div", "year-track", "");
-    const fill = createText("div", `year-fill ${year.status === "full" ? "" : "partial"}`, "");
-    fill.style.width = `${Math.max(1, year.total / max * 100)}%`;
-    track.append(fill);
-    row.append(track, createText("span", "year-total", cash(year.total)));
+    const details = createText("div", "year-details", "");
+    const track = createText("div", `year-track ${year.status === "full" ? "" : "partial"}`, "");
+    for (const [key, className] of [["season_total", "year-season-fill"], ["offseason_total", "year-offseason-fill"]]) {
+      const fill = createText("div", className, "");
+      fill.style.width = `${year[key] / max * 100}%`;
+      track.append(fill);
+    }
+    const split = createText("div", "year-split", "");
+    split.append(createText("span", "", `Сезонні місяці ${cash(year.season_total)}`));
+    split.append(createText("span", "", `Міжсезоння ${cash(year.offseason_total)}`));
+    details.append(track, split);
+    row.append(details, createText("span", "year-total", cash(year.total)));
     row.append(createText("span", `year-change ${year.change == null ? "tone-neutral" : tone(year.change)}`,
       year.change == null ? year.status === "full" ? "—" : "Неповний" : signedPercent(year.percent)));
     list.append(row);
@@ -209,11 +217,16 @@ function render(data) {
   populateSelectors(data.years, data.comparison);
   document.querySelector("#data-note").textContent =
     `Дані з ${dateLabel(data.first_record)} до ${dateLabel(data.as_of)}. Це виручка до вирахування витрат; неповні періоди позначені.`;
-  renderSeasons(data.seasons);
+  renderPeriods(data.seasons, "#season-chart", "#season-list", item => item.label,
+    "bar-season", SEASON_MONTHS, "");
+  renderPeriods(data.offseasons, "#offseason-chart", "#offseason-list", item => item.year,
+    "bar-offseason", OFFSEASON_MONTHS, "offseason-mini");
   renderYears(data.years);
   renderComparison(data.comparison);
   const fullSeasons = data.seasons.filter(item => item.status === "full");
   const season = fullSeasons.at(-1);
+  const fullOffseasons = data.offseasons.filter(item => item.status === "full");
+  const offseason = fullOffseasons.at(-1);
   const fullYears = data.years.filter(item => item.status === "full");
   const year = fullYears.at(-1);
   if (season) {
@@ -222,6 +235,13 @@ function render(data) {
     const change = document.querySelector("#highlight-season-change");
     change.textContent = growthText(season);
     change.className = `highlight-change ${season.change == null ? "tone-neutral" : tone(season.change)}`;
+  }
+  if (offseason) {
+    document.querySelector("#highlight-offseason-total").textContent = cash(offseason.total);
+    document.querySelector("#highlight-offseason-label").textContent = `Міжсезоння ${offseason.year}`;
+    const change = document.querySelector("#highlight-offseason-change");
+    change.textContent = growthText(offseason);
+    change.className = `highlight-change ${offseason.change == null ? "tone-neutral" : tone(offseason.change)}`;
   }
   if (year) {
     document.querySelector("#highlight-year-total").textContent = cash(year.total);

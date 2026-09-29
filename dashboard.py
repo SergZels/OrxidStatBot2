@@ -143,6 +143,8 @@ def revenue_reports(rows, today: dt.date, base_year: int, compare_year: int) -> 
         years.append({
             "year": year,
             "total": sum(months),
+            "season_total": sum(months[:4]) + sum(months[9:]),
+            "offseason_total": sum(months[4:9]),
             "months": months,
             "status": "full" if full else ("current" if year == today.year else "initial"),
             "change": None,
@@ -187,6 +189,34 @@ def revenue_reports(rows, today: dt.date, base_year: int, compare_year: int) -> 
             ) if previous else None
         seasons.append(season)
 
+    offseasons = []
+    for year in range(first_record.year, today.year + 1):
+        start = dt.date(year, 5, 1)
+        end = dt.date(year, 9, 30)
+        if end < first_record or start > today:
+            continue
+        months = [0] * 5
+        for date, amount in revenue.items():
+            if date.year == year and 5 <= date.month <= 9:
+                months[date.month - 5] += amount
+        full = first_record <= start and today > end
+        offseasons.append({
+            "year": year,
+            "total": sum(months),
+            "months": months,
+            "status": "full" if full else ("current" if today <= end else "initial"),
+            "change": None,
+            "percent": None,
+        })
+        if (len(offseasons) > 1 and full
+                and offseasons[-2]["status"] == "full"
+                and offseasons[-2]["year"] == year - 1):
+            previous = offseasons[-2]["total"]
+            offseasons[-1]["change"] = offseasons[-1]["total"] - previous
+            offseasons[-1]["percent"] = round(
+                offseasons[-1]["change"] / previous * 100, 1
+            ) if previous else None
+
     if not first_record.year <= base_year <= today.year:
         raise ValueError("Invalid base year")
     if not first_record.year <= compare_year <= today.year or base_year == compare_year:
@@ -227,6 +257,7 @@ def revenue_reports(rows, today: dt.date, base_year: int, compare_year: int) -> 
         "as_of": today.isoformat(),
         "first_record": first_record.isoformat(),
         "seasons": seasons,
+        "offseasons": offseasons,
         "years": years,
         "comparison": {
             "base_year": base_year,

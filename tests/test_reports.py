@@ -48,6 +48,28 @@ class RevenueReportTests(unittest.TestCase):
         self.assertEqual(comparison["window"]["end_day"], 29)
         self.assertEqual(comparison["percent"], -21.4)
 
+    def test_offseason_and_full_calendar_year_breakdown(self):
+        report = revenue_reports(ROWS, TODAY, 2025, 2026)
+        offseasons = report["offseasons"]
+        self.assertEqual(
+            [(item["year"], item["total"], item["status"]) for item in offseasons],
+            [(2023, 900, "full"), (2024, 0, "full"),
+             (2025, 200, "full"), (2026, 300, "current")],
+        )
+        self.assertIsNone(offseasons[-1]["change"])
+        self.assertEqual(offseasons[1]["change"], -900)
+        self.assertEqual(offseasons[1]["percent"], -100.0)
+        for year in report["years"]:
+            self.assertEqual(
+                year["total"], year["season_total"] + year["offseason_total"]
+            )
+        self.assertEqual(
+            [(year["year"], year["season_total"], year["offseason_total"])
+             for year in report["years"]],
+            [(2022, 100, 0), (2023, 500, 900), (2024, 1200, 0),
+             (2025, 750, 200), (2026, 250, 300)],
+        )
+
     def test_first_partial_year_only_compares_covered_dates(self):
         comparison = revenue_reports(ROWS, TODAY, 2022, 2023)["comparison"]
         self.assertTrue(comparison["available"])

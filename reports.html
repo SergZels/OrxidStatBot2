@@ -27,7 +27,7 @@
       <section class="reports-intro">
         <p class="eyebrow">ЗВІТИ З ВИРУЧКИ</p>
         <h1>Як змінюється <em>виручка.</em></h1>
-        <p class="intro-copy">Окремо за сезонами, календарними роками та однаковими проміжками двох років.</p>
+        <p class="intro-copy">Сезон, міжсезоння, повні календарні роки та порівняння однакових проміжків.</p>
         <div class="data-note">
           <span class="note-mark" aria-hidden="true">i</span>
           <span id="data-note">Рахуємо виручку до вирахування витрат. Завантаження даних…</span>
@@ -42,6 +42,12 @@
           <strong id="highlight-season-total">—</strong>
           <span id="highlight-season-label" class="highlight-label">—</span>
           <span id="highlight-season-change" class="highlight-change">—</span>
+        </article>
+        <article class="report-highlight amber">
+          <span class="highlight-kicker">ОСТАННЄ ЗАВЕРШЕНЕ МІЖСЕЗОННЯ</span>
+          <strong id="highlight-offseason-total">—</strong>
+          <span id="highlight-offseason-label" class="highlight-label">—</span>
+          <span id="highlight-offseason-change" class="highlight-change">—</span>
         </article>
         <article class="report-highlight violet">
           <span class="highlight-kicker">ОСТАННІЙ ПОВНИЙ РІК</span>
@@ -72,24 +78,40 @@
         <div id="season-list" class="season-list"></div>
       </section>
 
+      <section class="panel report-section" aria-labelledby="offseason-title">
+        <div class="report-heading">
+          <div>
+            <p class="eyebrow">02 / МІЖСЕЗОННЯ ДО МІЖСЕЗОННЯ</p>
+            <h2 id="offseason-title">Виручка поза сезоном</h2>
+            <p class="subtle">Міжсезоння — від 1 травня до 30 вересня одного року.</p>
+          </div>
+          <span class="section-chip">ТРАВЕНЬ → ВЕРЕСЕНЬ</span>
+        </div>
+        <div class="chart-scroll"><svg id="offseason-chart" viewBox="0 0 940 310" role="img" aria-label="Виручка за міжсезоннями"></svg></div>
+        <div class="report-divider"></div>
+        <h3>Деталі міжсезоння</h3>
+        <div id="offseason-list" class="season-list"></div>
+      </section>
+
       <section class="panel report-section" aria-labelledby="year-title">
         <div class="report-heading">
           <div>
-            <p class="eyebrow">02 / РІК ЗА РОКОМ</p>
-            <h2 id="year-title">Календарні роки</h2>
-            <p class="subtle">Виручка з 1 січня до 31 грудня. Неповні роки позначено окремо.</p>
+            <p class="eyebrow">03 / РІК ЗА РОКОМ</p>
+            <h2 id="year-title">Повні календарні роки</h2>
+            <p class="subtle">Річна виручка = сезонні місяці цього року (січень–квітень, жовтень–грудень) + міжсезоння (травень–вересень). Неповні роки позначено окремо.</p>
           </div>
           <span class="section-chip">СІЧЕНЬ → ГРУДЕНЬ</span>
         </div>
         <div class="chart-scroll"><svg id="annual-chart" viewBox="0 0 940 310" role="img" aria-label="Виручка за календарними роками"></svg></div>
         <div class="report-divider"></div>
+        <div class="year-legend"><span><i class="year-season-dot"></i>Сезонні місяці</span><span><i class="year-offseason-dot"></i>Міжсезоння</span></div>
         <div id="year-list" class="year-list"></div>
       </section>
 
       <section class="panel report-section" aria-labelledby="compare-title">
         <div class="report-heading compare-heading">
           <div>
-            <p class="eyebrow">03 / РІК ДО РОКУ</p>
+            <p class="eyebrow">04 / РІК ДО РОКУ</p>
             <h2 id="compare-title">Порівняння двох років</h2>
             <p id="compare-period" class="subtle">Для обох років береться однаковий проміжок дат.</p>
           </div>
