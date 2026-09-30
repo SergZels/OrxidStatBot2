@@ -11,7 +11,7 @@ const MONTHS_GENITIVE = [
 const SHORT_MONTHS = ["Січ", "Лют", "Бер", "Кві", "Тра", "Чер", "Лип", "Сер", "Вер", "Жов", "Лис", "Гру"];
 const SEASON_MONTHS = ["Жов", "Лис", "Гру", "Січ", "Лют", "Бер", "Кві"];
 const OFFSEASON_MONTHS = ["Тра", "Чер", "Лип", "Сер", "Вер"];
-const number = new Intl.NumberFormat("uk-UA", { maximumFractionDigits: 0 });
+const number = new Intl.NumberFormat("uk-UA", { maximumFractionDigits: 2 });
 const decimal = new Intl.NumberFormat("uk-UA", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const baseSelect = document.querySelector("#base-year");
 const compareSelect = document.querySelector("#compare-year");
@@ -26,7 +26,7 @@ const dateLabel = iso => iso.split("-").reverse().join(".");
 
 function shortValue(value) {
   if (value >= 1_000_000) return `${decimal.format(value / 1_000_000)} млн`;
-  if (value >= 10_000) return `${number.format(value / 1_000)} тис.`;
+  if (value >= 10_000) return `${decimal.format(value / 1_000)} тис.`;
   return number.format(value);
 }
 
@@ -122,6 +122,11 @@ function renderYears(years) {
     split.append(createText("span", "", `Міжсезоння ${cash(year.offseason_total)}`));
     details.append(track, split);
     row.append(details, createText("span", "year-total", cash(year.total)));
+    const average = createText("span", "year-average", "");
+    average.append(createText("small", "", "СЕРЕДНЯ / МІСЯЦЬ"));
+    average.append(createText("strong", "", cash(year.average_monthly)));
+    average.title = `Місяців у розрахунку: ${year.covered_months}`;
+    row.append(average);
     row.append(createText("span", `year-change ${year.change == null ? "tone-neutral" : tone(year.change)}`,
       year.change == null ? year.status === "full" ? "—" : "Неповний" : signedPercent(year.percent)));
     list.append(row);
@@ -216,7 +221,7 @@ function populateSelectors(years, comparison) {
 function render(data) {
   populateSelectors(data.years, data.comparison);
   document.querySelector("#data-note").textContent =
-    `Дані з ${dateLabel(data.first_record)} до ${dateLabel(data.as_of)}. Це виручка до вирахування витрат; неповні періоди позначені.`;
+    `Дані з ${dateLabel(data.first_record)} до ${dateLabel(data.as_of)}. Виручка = оборот ÷ 2, до вирахування витрат; неповні періоди позначені.`;
   renderPeriods(data.seasons, "#season-chart", "#season-list", item => item.label,
     "bar-season", SEASON_MONTHS, "");
   renderPeriods(data.offseasons, "#offseason-chart", "#offseason-list", item => item.year,

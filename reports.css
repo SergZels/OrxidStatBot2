@@ -47,7 +47,7 @@ svg .chart-area-compare { fill: #6de2ba; opacity: .08; }
 .season-month-labels { display: flex; justify-content: space-between; gap: 2px; margin-top: 4px; color: #8e9bb0; font-size: 9px; }
 
 .year-list { display: grid; gap: 8px; }
-.year-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) 128px 110px; align-items: center; gap: 14px; padding: 11px 15px; border: 1px solid #2d3d53; border-radius: 11px; background: #162237; }
+.year-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) 120px 125px 86px; align-items: center; gap: 14px; padding: 11px 15px; border: 1px solid #2d3d53; border-radius: 11px; background: #162237; }
 .year-row strong { font-size: 13px; }
 .year-legend { display: flex; justify-content: flex-end; gap: 18px; margin: -6px 0 15px; color: var(--muted); font-size: 11px; }
 .year-legend span { display: inline-flex; align-items: center; gap: 6px; }
@@ -60,6 +60,9 @@ svg .chart-area-compare { fill: #6de2ba; opacity: .08; }
 .year-row .year-track > div { height: 100%; }
 .year-split { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 12px; margin-top: 5px; color: var(--muted); font-size: 10px; font-variant-numeric: tabular-nums; }
 .year-row .year-total { text-align: right; font-size: 13px; font-weight: 750; }
+.year-row .year-average { display: grid; gap: 3px; text-align: right; }
+.year-row .year-average small { color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .05em; }
+.year-row .year-average strong { font-size: 12px; font-variant-numeric: tabular-nums; }
 .year-row .year-change { text-align: right; font-size: 11px; font-weight: 750; }
 
 .compare-heading { align-items: center; }
@@ -88,6 +91,10 @@ svg .chart-area-compare { fill: #6de2ba; opacity: .08; }
 @media (max-width: 1100px) {
   .report-highlights { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .season-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .year-row { grid-template-columns: 54px minmax(0, 1fr) 112px 110px; gap: 9px; }
+  .year-row .year-change { grid-column: 4; }
+  .year-row .year-average { grid-column: 4; grid-row: 1; }
+  .year-row .year-change { grid-row: 2; }
 }
 @media (max-width: 720px) {
   .reports-intro { padding: 35px 0 25px; }
@@ -104,7 +111,8 @@ svg .chart-area-compare { fill: #6de2ba; opacity: .08; }
   .season-card-top { display: block; }
   .period-status { margin-top: 5px; }
   .year-row { grid-template-columns: 48px minmax(0, 1fr) 90px; gap: 9px; padding: 10px; }
-  .year-row .year-change { grid-column: 3; }
+  .year-row .year-average { grid-column: 2; grid-row: 2; text-align: left; }
+  .year-row .year-change { grid-column: 3; grid-row: 2; }
   .compare-controls { width: 100%; justify-content: space-between; margin-top: 16px; }
   .compare-totals { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .compare-totals > div:last-child { grid-column: 1 / -1; }

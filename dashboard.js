@@ -5,7 +5,8 @@ const months = [
   "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"
 ];
 const monthShort = ["Січ", "Лют", "Бер", "Кві", "Тра", "Чер", "Лип", "Сер", "Вер", "Жов", "Лис", "Гру"];
-const money = new Intl.NumberFormat("uk-UA", { maximumFractionDigits: 0 });
+const money = new Intl.NumberFormat("uk-UA", { maximumFractionDigits: 2 });
+const compact = new Intl.NumberFormat("uk-UA", { maximumFractionDigits: 1 });
 const monthSelect = document.querySelector("#month");
 const yearSelect = document.querySelector("#year");
 const errorBox = document.querySelector("#error");
@@ -23,8 +24,8 @@ function currency(value) {
 }
 
 function shortNumber(value) {
-  if (value >= 1_000_000) return `${money.format(value / 1_000_000)} млн`;
-  if (value >= 10_000) return `${money.format(value / 1_000)} тис.`;
+  if (value >= 1_000_000) return `${compact.format(value / 1_000_000)} млн`;
+  if (value >= 10_000) return `${compact.format(value / 1_000)} тис.`;
   return money.format(value);
 }
 
@@ -133,6 +134,8 @@ function render(data) {
   for (const key of ["revenue", "expenses", "balance", "average"]) {
     document.querySelector(`#${key}`).textContent = currency(summary[key]);
   }
+  document.querySelector("#average-period").textContent =
+    `за місяць у ${period.year} році · ${summary.average_months} міс. у розрахунку`;
   document.querySelector("#daily-subtitle").textContent = `${months[period.month - 1]} ${period.year} · щоденний огляд`;
   document.querySelector("#donut-balance").textContent = currency(summary.balance);
   document.querySelector("#split-revenue").textContent = currency(summary.revenue);

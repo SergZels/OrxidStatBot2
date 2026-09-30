@@ -11,6 +11,8 @@ from zoneinfo import ZoneInfo
 
 from aiohttp import web
 
+from accounting import covered_months, revenue_from_turnover
+
 
 BASE_DIR = Path(__file__).resolve().parent
 DB_PATH = Path(os.getenv("DATA_DIR", "/data")) / "botBD.db"
@@ -49,7 +51,7 @@ def load_statistics(year: int, month: int) -> dict:
         db.row_factory = sqlite3.Row
         db.execute("PRAGMA query_only=ON")
         revenue_rows = db.execute(
-            """SELECT date, SUM(cashAM + cashPM) AS total
+            """SELECT date, SUM(COALESCE(cashAM, 0) + COALESCE(cashPM, 0)) AS total
                FROM stat WHERE date >= ? AND date < ?
                GROUP BY date ORDER BY date""",
             (start, end),
@@ -62,7 +64,8 @@ def load_statistics(year: int, month: int) -> dict:
         ).fetchall()
         year_start, year_end = f"{year}-01-01", f"{year + 1}-01-01"
         year_revenue = db.execute(
-            """SELECT substr(date, 6, 2) AS month, SUM(cashAM + cashPM) AS total
+            """SELECT substr(date, 6, 2) AS month,
+                      SUM(COALESCE(cashAM, 0) + COALESCE(cashPM, 0)) AS total
                FROM stat WHERE date >= ? AND date < ?
                GROUP BY substr(date, 6, 2)""",
             (year_start, year_end),
@@ -86,8 +89,10 @@ def load_statistics(year: int, month: int) -> dict:
                 SELECT MIN(substr(date, 1, 4)) AS year FROM credet
             )"""
         ).fetchone()[0]
+        earliest_revenue = db.execute("SELECT MIN(date) FROM stat").fetchone()[0]
 
-    revenue = {row["date"]: row["total"] or 0 for row in revenue_rows}
+    revenue = {row["date"]: revenue_from_turnover(row["total"] or 0)
+               for row in revenue_rows}
     expenses = {row["date"]: row["total"] or 0 for row in expense_rows}
     daily = []
     for day in range(1, calendar.monthrange(year, month)[1] + 1):
@@ -97,7 +102,8 @@ def load_statistics(year: int, month: int) -> dict:
             {"date": date, "day": day, "revenue": earned,
              "expenses": spent, "balance": earned - spent}
         )
-    monthly_revenue = {int(row["month"]): row["total"] or 0 for row in year_revenue}
+    monthly_revenue = {int(row["month"]): revenue_from_turnover(row["total"] or 0)
+                       for row in year_revenue}
     monthly_expenses = {int(row["month"]): row["total"] or 0 for row in year_expenses}
     monthly = [
         {"month": value, "revenue": monthly_revenue.get(value, 0),
@@ -108,7 +114,11 @@ def load_statistics(year: int, month: int) -> dict:
     total_expenses = sum(expenses.values())
     active_days = sum(day["revenue"] > 0 for day in daily)
     best_day = max(daily, key=lambda day: day["revenue"]) if active_days else None
-    current_year = dt.datetime.now(KYIV).year
+    today = dt.datetime.now(KYIV).date()
+    current_year = today.year
+    first_record = dt.date.fromisoformat(earliest_revenue) if earliest_revenue else today
+    year_months = covered_months(year, first_record, today)
+    year_revenue_total = sum(monthly_revenue.values())
     return {
         "period": {"year": year, "month": month},
         "years": list(range(int(earliest or current_year), current_year + 1)),
@@ -116,7 +126,8 @@ def load_statistics(year: int, month: int) -> dict:
             "revenue": total_revenue,
             "expenses": total_expenses,
             "balance": total_revenue - total_expenses,
-            "average": round(total_revenue / active_days) if active_days else 0,
+            "average": round(year_revenue_total / year_months, 2) if year_months else 0,
+            "average_months": year_months,
             "active_days": active_days,
             "best_day": best_day["date"] if best_day else None,
         },
@@ -127,9 +138,9 @@ def load_statistics(year: int, month: int) -> dict:
 
 
 def revenue_reports(rows, today: dt.date, base_year: int, compare_year: int) -> dict:
-    """Build revenue-only reports from daily rows (date, amount)."""
+    """Build revenue reports from daily turnover rows (date, amount)."""
     revenue = {
-        dt.date.fromisoformat(date): int(amount or 0)
+        dt.date.fromisoformat(date): revenue_from_turnover(amount or 0)
         for date, amount in rows
     }
     first_record = min(revenue, default=today)
@@ -140,11 +151,14 @@ def revenue_reports(rows, today: dt.date, base_year: int, compare_year: int) -> 
             if date.year == year:
                 months[date.month - 1] += amount
         full = first_record <= dt.date(year, 1, 1) and year < today.year
+        month_count = covered_months(year, first_record, today)
         years.append({
             "year": year,
             "total": sum(months),
             "season_total": sum(months[:4]) + sum(months[9:]),
             "offseason_total": sum(months[4:9]),
+            "covered_months": month_count,
+            "average_monthly": round(sum(months) / month_count, 2) if month_count else 0,
             "months": months,
             "status": "full" if full else ("current" if year == today.year else "initial"),
             "change": None,
@@ -282,7 +296,7 @@ def load_reports(base_year: int, compare_year: int) -> dict:
     with closing(sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True)) as db:
         db.execute("PRAGMA query_only=ON")
         rows = db.execute(
-            """SELECT date, SUM(cashAM + cashPM)
+            """SELECT date, SUM(COALESCE(cashAM, 0) + COALESCE(cashPM, 0))
                FROM stat GROUP BY date ORDER BY date"""
         ).fetchall()
     return revenue_reports(rows, dt.datetime.now(KYIV).date(), base_year, compare_year)

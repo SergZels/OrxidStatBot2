@@ -26,10 +26,10 @@ class RevenueReportTests(unittest.TestCase):
         self.assertEqual(
             [(item["label"], item["total"], item["status"]) for item in seasons],
             [
-                ("2022/23", 300, "initial"),
-                ("2023/24", 500, "full"),
-                ("2024/25", 1500, "full"),
-                ("2025/26", 500, "full"),
+                ("2022/23", 150, "initial"),
+                ("2023/24", 250, "full"),
+                ("2024/25", 750, "full"),
+                ("2025/26", 250, "full"),
             ],
         )
         self.assertIsNone(seasons[1]["percent"])
@@ -42,8 +42,8 @@ class RevenueReportTests(unittest.TestCase):
         self.assertEqual(years[-1]["status"], "current")
         self.assertIsNone(years[-1]["percent"])
         comparison = report["comparison"]
-        self.assertEqual(comparison["base_total"], 700)
-        self.assertEqual(comparison["compare_total"], 550)
+        self.assertEqual(comparison["base_total"], 350)
+        self.assertEqual(comparison["compare_total"], 275)
         self.assertEqual(comparison["window"]["end_month"], 9)
         self.assertEqual(comparison["window"]["end_day"], 29)
         self.assertEqual(comparison["percent"], -21.4)
@@ -53,11 +53,11 @@ class RevenueReportTests(unittest.TestCase):
         offseasons = report["offseasons"]
         self.assertEqual(
             [(item["year"], item["total"], item["status"]) for item in offseasons],
-            [(2023, 900, "full"), (2024, 0, "full"),
-             (2025, 200, "full"), (2026, 300, "current")],
+            [(2023, 450, "full"), (2024, 0, "full"),
+             (2025, 100, "full"), (2026, 150, "current")],
         )
         self.assertIsNone(offseasons[-1]["change"])
-        self.assertEqual(offseasons[1]["change"], -900)
+        self.assertEqual(offseasons[1]["change"], -450)
         self.assertEqual(offseasons[1]["percent"], -100.0)
         for year in report["years"]:
             self.assertEqual(
@@ -66,16 +66,30 @@ class RevenueReportTests(unittest.TestCase):
         self.assertEqual(
             [(year["year"], year["season_total"], year["offseason_total"])
              for year in report["years"]],
-            [(2022, 100, 0), (2023, 500, 900), (2024, 1200, 0),
-             (2025, 750, 200), (2026, 250, 300)],
+            [(2022, 50, 0), (2023, 250, 450), (2024, 600, 0),
+             (2025, 375, 100), (2026, 125, 150)],
         )
+        self.assertEqual(report["years"][0]["covered_months"], 3)
+        self.assertEqual(report["years"][1]["covered_months"], 12)
+        self.assertEqual(report["years"][1]["average_monthly"], 58.33)
+        self.assertEqual(report["years"][-1]["covered_months"], 9)
+
+    def test_half_hryvnia_is_preserved(self):
+        report = revenue_reports(
+            [("2024-01-01", 101), ("2024-01-02", 1), ("2025-01-01", 3)],
+            dt.date(2025, 1, 2), 2024, 2025,
+        )
+        self.assertEqual(report["years"][0]["total"], 51)
+        self.assertEqual(report["years"][0]["average_monthly"], 4.25)
+        self.assertEqual(report["years"][1]["average_monthly"], 1.5)
+        self.assertEqual(report["comparison"]["compare_total"], 1.5)
 
     def test_first_partial_year_only_compares_covered_dates(self):
         comparison = revenue_reports(ROWS, TODAY, 2022, 2023)["comparison"]
         self.assertTrue(comparison["available"])
         self.assertEqual(comparison["window"]["start_month"], 10)
         self.assertEqual(comparison["window"]["start_day"], 11)
-        self.assertEqual(comparison["base_total"], 100)
+        self.assertEqual(comparison["base_total"], 50)
         self.assertEqual(comparison["compare_total"], 0)
         self.assertFalse(
             revenue_reports(ROWS, TODAY, 2022, 2026)["comparison"]["available"]

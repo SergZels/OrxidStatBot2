@@ -75,31 +75,31 @@ async def dashboard_link(message: types.Message):
     )
 
 
-@router.message(F.text == "Виручка до обіду 💵", StateFilter(None))
+@router.message(F.text.in_({"Оборот до обіду 💵", "Виручка до обіду 💵"}), StateFilter(None))
 async def cash_to_am(message: types.Message, state: FSMContext):
     await state.set_state(RevenueAM.amount)
-    await message.answer("Напишіть вашу обідню виручку💵:", reply_markup=ReplyKeyboardRemove())
+    await message.answer("Напишіть оборот до обіду 💵:", reply_markup=ReplyKeyboardRemove())
 
 
 @router.message(RevenueAM.amount, F.text)
 async def save_am(message: types.Message, state: FSMContext, bot: Bot):
     BotBDnew.recAM(message.text)
     for admin_id in ADMIN_IDS:
-        await bot.send_message(admin_id, f"Виручку {message.text}грн внесено!", reply_markup=markup)
+        await bot.send_message(admin_id, f"Оборот {message.text} грн внесено!", reply_markup=markup)
     await state.clear()
 
 
-@router.message(F.text == "Виручка після обіду 💶", StateFilter(None))
+@router.message(F.text.in_({"Оборот після обіду 💶", "Виручка після обіду 💶"}), StateFilter(None))
 async def cash_after_pm(message: types.Message, state: FSMContext):
     await state.set_state(RevenuePM.amount)
-    await message.answer("Напишіть вашу виручку в кінці дня:", reply_markup=ReplyKeyboardRemove())
+    await message.answer("Напишіть оборот після обіду 💶:", reply_markup=ReplyKeyboardRemove())
 
 
 @router.message(RevenuePM.amount, F.text)
 async def save_pm(message: types.Message, state: FSMContext, bot: Bot):
     BotBDnew.recPM(message.text)
     for admin_id in ADMIN_IDS:
-        await bot.send_message(admin_id, f"Виручку {message.text}грн внесено!", reply_markup=markup)
+        await bot.send_message(admin_id, f"Оборот {message.text} грн внесено!", reply_markup=markup)
     await state.clear()
 
 
@@ -200,7 +200,7 @@ async def reminder_loop(bot: Bot):
         await asyncio.sleep(max(0, (scheduled - now).total_seconds()))
         for admin_id in ADMIN_IDS:
             try:
-                await bot.send_message(admin_id, "Нагадування - запишіть вашу виручку💶!")
+                await bot.send_message(admin_id, "Нагадування — запишіть оборот 💶!")
             except Exception:
                 logger.exception("Failed to send reminder to {}", admin_id)
 
